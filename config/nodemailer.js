@@ -2,9 +2,9 @@ const { google } = require('googleapis');
 const nodemailer = require('nodemailer');
 
 const oAuth2Client = new google.auth.OAuth2(
-  'GOOGLE_CLIENT_ID', // Client ID
-  'GOOGLE_CLIENT_SECRET', // Client Secret
-  'https://localhost/3000' // Redirect URL
+  process.env.GOOGLE_CLIENT_ID, // Client ID
+  process.env.GOOGLE_CLIENT_SECRET, // Client Secret
+  process.env.GOOGLE_REDIRECT_URL, // Redirect URL
 );
 
 oAuth2Client.setCredentials({
