@@ -1,0 +1,23 @@
+<h2>All Documents</h2>
+<ul>
+  {{#each documents}}
+    <li style="background-color: #f0f0f0; margin-bottom: 10px; padding: 10px; border-radius: 5px; position: relative;">
+      <span style="display: block; margin-bottom: 10px;">
+        <a href="/documents/{{this._id}}/annex" target="_blank" class="waves-effect waves-light btn-small blue">View Annex</a>
+      <a href="/documents/{{this._id}}/invoice" target="_blank" class="waves-effect waves-light btn-small blue">View Invoice</a>
+        <span>
+        {{formatStatus this.status}}</span>
+        - {{formatDate this.createdAt "MM/DD/YYYY"}} - 
+        Creator: {{this.user.firstName}} {{this.user.lastName}}
+      </span>
+      <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+        <form action="/documents/{{this._id}}/accept" method="POST" style="display: inline-block; margin-right: 10px;">
+          <button type="submit" class="waves-effect waves-light btn-small">Accept</button>
+        </form>
+        <form action="/documents/{{this._id}}/reject" method="POST" style="display: inline-block;">
+          <button type="submit" class="waves-effect waves-light btn-small red">Reject</button>
+        </form>
+      </div>
+    </li>
+  {{/each}}
+</ul>
