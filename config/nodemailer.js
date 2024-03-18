@@ -20,9 +20,9 @@ async function sendEmail(to, subject, text) {
       auth: {
         type: 'OAuth2',
         user: 'piumenotifications@gmail.com',
-        clientId: 'GOOGLE_CLIENT_ID',
-        clientSecret: 'GOOGLE_CLIENT_SECRET',
-        refreshToken: 'GOOGLE_REFRESH_TOKEN',
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
         accessToken: accessToken.token,
       }
     });
