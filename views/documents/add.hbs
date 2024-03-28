@@ -1,40 +1,265 @@
-<h3>Add Documents</h3>
-<div class="row">
-    <form action="/documents" method="POST" enctype="multipart/form-data" class="col s12">
-        <div class="row">
-            <div class="input-field">
-                <input type="text" id="fullName" name="fullName">
-                <label for="fullName">First and Last Name</label>
+<div class="row add-invoice-page">
+    <form id="invoiceForm" action="/documents" method="POST" enctype="multipart/form-data">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Payment Details</span>
+
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input type="text" id="contractor" name="contractor">
+                            <label for="contractor">Contractor</label>
+                        </div>
+
+
+                        <div class="input-field col s4">
+                            <input type="text" id="MXandAddress" name="MXandAddress">
+                            <label for="MXandAddress">MX and Address</label>
+                        </div>
+
+
+
+                        <div class="input-field col s4">
+                            <input type="text" id="YUandAddress" name="YUandAddress">
+                            <label for="YUandAddress">YU and Address</label>
+                        </div>
+                    </div>
+
+                    <div class="row contracting-authority-group">
+                        <div class="input-field col s6">
+                            <input type="text" id="contractingAuthority" name="contractingAuthority">
+                            <label for="contractingAuthority">Contracting Authority</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input type="text" id="authorityAddress1" name="authorityAddress1">
+                            <label for="authorityAddress1">Address 1</label>
+                        </div>
+
+
+                        <div class="input-field col s4">
+                            <input type="text" id="authorityAddress2" name="authorityAddress2">
+                            <label for="authorityAddress2">Address 2</label>
+                        </div>
+
+
+                        <div class="input-field col s4">
+                            <input type="text" id="authorityAddress3" name="authorityAddress3">
+                            <label for="authorityAddress3">Address 3</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="cityZip" name="cityZip">
+                            <label for="cityZip">City, ZIP</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="country" name="country">
+                            <label for="country">Country</label>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="input-field col s6">
+                            <input type="text" id="engineer" name="engineer">
+                            <label for="engineer">Engineer (YYY and Address)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="finalBeneficiary" name="finalBeneficiary">
+                            <label for="finalBeneficiary">Final Beneficiary (CCC and Address)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="endRecepient" name="endRecepient">
+                            <label for="endRecepient">End Recepient (OOO and Address)</label>
+                        </div>
+                    </div>
+
+                    <div class="row date-inputs-group">
+                        <div class="input-field col s6">
+                            <input type="text" id="periodOfValuationStart" name="periodOfValuationStart"
+                                class="datepicker">
+                            <label for="periodOfValuationStart">Period of Valuation Start</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" id="periodOfValuationEnd" name="periodOfValuationEnd" class="datepicker">
+                            <label for="periodOfValuationEnd">Period of Valuation End</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="interimPaymentDate" name="interimPaymentDate" class="datepicker">
+                            <label for="interimPaymentDate">Date of Application for Interim Payment</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="commenceDate" name="commenceDate" class="datepicker">
+                            <label for="commenceDate">Date of Commence</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="originalCompletionDate" name="originalCompletionDate"
+                                class="datepicker">
+                            <label for="originalCompletionDate">Original Completion Date</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="text" id="extendedCompletionDate" name="extendedCompletionDate"
+                                class="datepicker">
+                            <label for="extendedCompletionDate">Extended Completion Date</label>
+                        </div>
+                    </div>
+
+                    <div class="row financial-inputs-group">
+                        <div class="input-field col s6">
+                            <input type="number" id="advancePaymentGuaranteeValue" name="advancePaymentGuaranteeValue"
+                                min="0" step="0.01" class="financialInput">
+                            <label for="advancePaymentGuaranteeValue">Advance Payment Guarantee Value (EUR)</label>
+                        </div>
+
+
+                        <div class="input-field col s6">
+                            <input type="text" id="advancePaymentGuaranteeExpiry" name="advancePaymentGuaranteeExpiry"
+                                class="datepicker">
+                            <label for="advancePaymentGuaranteeExpiry">Expiry Date</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="performanceGuaranteeValue" name="performanceGuaranteeValue" min="0"
+                                step="0.01" class="financialInput">
+                            <label for="performanceGuaranteeValue">Performance Guarantee Value (including Addendum no.
+                                1) (EUR)</label>
+                        </div>
+
+
+                        <div class="input-field col s6">
+                            <input type="text" id="performanceGuaranteeValueExpiry"
+                                name="performanceGuaranteeValueExpiry" class="datepicker">
+                            <label for="performanceGuaranteeValueExpiry">Expiry Date</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="retentionMoneyBondValue" name="retentionMoneyBondValue" min="0"
+                                step="0.01" class="financialInput">
+                            <label for="retentionMoneyBondValue">Retention Money Bond Value (EUR)</label>
+                        </div>
+
+
+                        <div class="input-field col s6">
+                            <input type="text" id="retentionMoneyBondExpiry" name="retentionMoneyBondExpiry"
+                                class="datepicker">
+                            <label for="retentionMoneyBondExpiry">Expiry Date</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="restRetentionMoneyBondValue" name="restRetentionMoneyBondValue"
+                                min="0" step="0.01" class="financialInput">
+                            <label for="restRetentionMoneyBondValue">Rest of Retention Money Bond Value (EUR)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="contractedSumExProvisionalValue"
+                                name="contractedSumExProvisionalValue" min="0" step="0.01" class="financialInput">
+                            <label for="contractedSumExProvisionalValue">Contracted Sum Excluding Provisional Sum
+                                (EUR)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="addendum1" name="addendum1" min="0" step="0.01"
+                                class="financialInput">
+                            <label for="addendum1">Addendum no. 1</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="authorizedVariationOrders" name="authorizedVariationOrders" min="0"
+                                step="0.01" class="financialInput">
+                            <label for="authorizedVariationOrders">Authorize Variation Orders (EUR)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="acceptedSumInclAddendum1" name="acceptedSumInclAddendum1" min="0"
+                                step="0.01" class="financialInput">
+                            <label for="acceptedSumInclAddendum1">Accepted Contract Sum Including Addendum no. 1
+                                (EUR)</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input type="number" id="actualProgress" name="actualProgress" min="0" max="100"
+                                step="0.01">
+                            <label for="actualProgress">Actual Progress (%)</label>
+                        </div>
+
+                        <div class="file-field input-field col s6">
+                            <div class="btn">
+                                <span>Upload the Annex Here</span>
+                                <input type="file" id="annexUpload" name="annexUpload">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload the Annex Here">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row final-info-group">
+                        <div class="text-field col s4">
+                            <p>Subject: Interim Payment Certificate</p>
+                        </div>
+
+                        <div class="text-field col s4">
+                            <p>03</p>
+                        </div>
+
+                        <div id="projectPeriodDisplay" class="col s4">Project Period: Not Set</div>
+
+                        </div>
+                        
+                        <div id="totalSumDisplay" class="col s6">Total Sum: 0 EUR</div>
+
+                        <div class="input-field col s4">
+                            <input type="hidden" id="projectPeriod" name="projectPeriod"> 
+                        </div>
+                    
+
+                    <div class="row final-amount-group">
+                            <input type="hidden" id="totalSum" name="totalSum">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         <div class="row">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>File</span>
-                    <input type="file" id="invoiceUpload" name="invoiceUpload" accept="application/pdf">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload Invoice">
+            <div class="col s12 right-align">
+                <div class="card-action">
+                    <button type="button" onclick="resetForm()" class="btn waves-effect waves-light blue lighten-1"
+                        style="margin-right: 10px;">Clear Form</button>
+                    <button type="button" onclick="history.back();"
+                        class="btn waves-effect waves-light red btn-large">Cancel</button>
+                    <button type="submit" class="btn waves-effect waves-light green btn-large">Save</button>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>File</span>
-                    <input type="file" id="annexUpload" name="annexUpload" accept="application/pdf">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload Annex">
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <input type="submit" value="Save" class="btn">
-            <a href="/dashboard" class="btn orange">Cancel</a>
         </div>
     </form>
 </div>

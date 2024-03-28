@@ -1,3 +1,5 @@
+require('dotenv').config({ path: './config/.env' })
+
 const express = require('express')
 const router = express.Router()
 const { ensureAuth, ensureGuest, ensureAdmin } = require('../middleware/auth')
@@ -7,7 +9,9 @@ const upload = multer()
 const Document = require('../models/Document')
 const User = require('../models/User')
 const Notification = require('../models/Notification')
-const transporter = require('../config/nodemailer')
+const {sendEmail} = require('../config/nodemailer')
+const PDFDocument = require('pdfkit')
+const fs = require('fs')
 
 // @desc    Show add page
 // @route   GET /documents/add
@@ -17,22 +21,124 @@ router.get('/add', ensureAuth, (req, res) => {
 
 // @desc    Process add form
 // @route   POST /documents
-router.post('/', ensureAuth, upload.fields([{ name: 'invoiceUpload', maxCount: 1 }, { name: 'annexUpload', maxCount: 1 }]), async (req, res) => {
+router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
   try {
-    const annex = req.files.annexUpload[0].buffer;
-    const invoice = req.files.invoiceUpload[0].buffer;
+    const annex = req.file.buffer
     const status = req.body.status || 'pending'
     const createdAt = req.body.createdAt ? newDate(req.body.createdAt) : Date.now()
 
-    
-    await Document.create({
-      user: req.user.id,
-      annex,
-      invoice,
-      status: status,
-      createdAt: createdAt,
+    const doc = new PDFDocument()
+    let buffers = []
+    doc.on('data', buffers.push.bind(buffers))
+    doc.on('end', async() => {
+      let invoicePdfBuffer = Buffer.concat(buffers)
+
+      await Document.create({
+        user: req.user.id,
+        annex,
+        invoice: invoicePdfBuffer,
+        status: status,
+        createdAt: createdAt,
+      })
+      res.redirect('/dashboard')
     })
-    res.redirect('/dashboard')
+
+    let y = 100
+    const lineSpacing = 15
+    const horizontalLineStart = 50
+    const horizontalLineEnd = 550
+
+    const projectPeriod = req.body.projectPeriod
+    const totalSum = req.body.totalSum
+
+    //Contractor information
+    doc.fontSize(12).text(`Contractor: ${req.body.contractor}`, 100, y);
+    y += lineSpacing
+    doc.text(`MX and Address: ${req.body.MXandAddress}`, 100, y);
+    y += lineSpacing
+    doc.text(`YU and Address: ${req.body.YUandAddress}`, 100, y);
+    y += lineSpacing
+
+
+    y += lineSpacing
+    doc.moveTo(horizontalLineStart, y).lineTo(horizontalLineEnd, y).stroke()
+    y += lineSpacing
+
+    //Contracting authority info
+    doc.text(`Contracting Authority: ${req.body.contractingAuthority}`, 100, y);
+    y += lineSpacing
+    doc.text(`Authority Address 1: ${req.body.authorityAddress1}`, 100, y);
+    y += lineSpacing
+    doc.text(`Authority Address 2: ${req.body.authorityAddress2}`, 100, y);
+    y += lineSpacing
+    doc.text(`Authority Address 3: ${req.body.authorityAddress3}`, 100, y);
+    y += lineSpacing
+    doc.text(`City and ZIP: ${req.body.cityZip}`, 100, y);
+    y += lineSpacing
+    doc.text(`Country: ${req.body.country}`, 100, y);
+    y += lineSpacing
+    doc.text(`Engineer: ${req.body.engineer}`, 100, y);
+    y += lineSpacing
+    doc.text(`Final Beneficiary: ${req.body.finalBeneficiary}`, 100, y);
+    y += lineSpacing
+    doc.text(`End Recepient: ${req.body.endRecepient}`, 100, y);
+    y += lineSpacing
+
+    y += lineSpacing
+    doc.moveTo(horizontalLineStart, y).lineTo(horizontalLineEnd, y).stroke()
+    y += lineSpacing
+
+    //Financial and date info
+    doc.text(`Period Of Valuation Start: ${req.body.periodOfValuationStart}`, 100, y);
+    y += lineSpacing
+    doc.text(`Period Of Valuation End: ${req.body.periodOfValuationEnd}`, 100, y);
+    y += lineSpacing
+    doc.text(`Date of Application for Interim Payment: ${req.body.interimPaymentDate}`, 100, y);
+    y += lineSpacing
+    doc.text(`Date of Commence: ${req.body.commenceDate}`, 100, y);
+    y += lineSpacing
+    doc.text(`Original Completion Date: ${req.body.originalCompletionDate}`, 100, y);
+    y += lineSpacing
+    doc.text(`Extended Completion Date: ${req.body.extendedCompletionDate}`, 100, y);
+    y += lineSpacing
+    doc.text(`Advance Payment Guarantee Value (EUR): ${req.body.advancePaymentGuaranteeValue}`, 100, y);
+    y += lineSpacing
+    doc.text(`Advance Payment Guarantee Expiry Date: ${req.body.advancePaymentGuaranteeExpiry}`, 100, y);
+    y += lineSpacing
+    doc.text(`Performance Guarantee Value (EUR): ${req.body.performanceGuaranteeValue}`, 100, y);
+    y += lineSpacing
+    doc.text(`Performance Guarantee Value Expiry Date: ${req.body.performanceGuaranteeValueExpiry}`, 100, y);
+    y += lineSpacing
+    doc.text(`Retention Money Bond Value (EUR): ${req.body.retentionMoneyBondValue}`, 100, y);
+    y += lineSpacing
+    doc.text(`Retention Money Bond Value Expiry Date: ${req.body.retentionMoneyBondExpiry}`, 100, y);
+    y += lineSpacing
+    doc.text(`Rest of Retention Money Bond Value (EUR): ${req.body.restRetentionMoneyBondValue}`, 100, y);
+    y += lineSpacing
+    doc.text(`Contracted Sum Excluding Provisional Sum (EUR): ${req.body.contractedSumExProvisionalValue}`, 100, y);
+    y += lineSpacing
+    doc.text(`Addendum no. 1: ${req.body.addendum1}`, 100, y);
+    y += lineSpacing
+    doc.text(`Authorized Variation Orders (EUR): ${req.body.authorizedVariationOrders}`, 100, y);
+    y += lineSpacing
+    doc.text(`Accepted Contract Sum Including Addendum no. 1 (EUR): ${req.body.acceptedSumInclAddendum1}`, 100, y);
+    y += lineSpacing
+    doc.text(`Actual Progress: ${req.body.actualProgress}`, 100, y);
+    y += lineSpacing
+
+    y += lineSpacing
+    doc.moveTo(horizontalLineStart, y).lineTo(horizontalLineEnd, y).stroke()
+    y += lineSpacing
+
+    //Summary
+    y += lineSpacing
+    doc.text(`For the Period: ${projectPeriod}`, 100, y);
+    y += lineSpacing
+    doc.text(`Contract Ammount as Letter of Acceptance: ${totalSum}`, 100, y);
+    y += lineSpacing
+
+
+    doc.end()
   } catch (err) {
     console.error(err)
     res.render('error/500')
@@ -137,18 +243,22 @@ router.get('/engineer-dashboard', async (req, res) => {
 //@route   POST /documents/:id/accept
 router.post('/:id/accept', ensureAuth, async (req, res) => {
   try {
-    const result = await Document.updateOne({ _id: req.params.id }, { $set: { status: 'accepted' } })
+    const result = await Document.updateOne({ _id: req.params.id }, { $set: { status: 'accepted' } }).populate('user')
 
     if (result.matchedCount === 0) {
       return res.status(404).send('Document not found')
     }
 
-    await Notification.create({
-      userId: document.user._id,
-      message: `Your document has been accepted.`,
-      documentId: document._id,
+    
+    await sendEmail ({
+    to: "matejadudvarski@gmail.com",
+    subject: "Your document has been accepted.",
+    text: "Your document has been reviewed and accepted by an engineer.",
+    html: "<b>Your document has been reviewed and accepted by an engineer. </b>"
     })
+  
 
+    console.log('Email sent successfully')
     res.redirect('/documents/engineer-dashboard')
   } catch (err) {
     console.error(err)
@@ -160,7 +270,11 @@ router.post('/:id/accept', ensureAuth, async (req, res) => {
 //@route   POST /documents/:id/reject
 router.post('/:id/reject', async (req, res) => {
   try {
-    await Document.findByIdAndDelete(req.params.id)
+    const result = await Document.updateOne({ _id: req.params.id }, { $set: { status: 'rejected' } })
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send('Document not found')
+    }
     res.redirect('/documents/engineer-dashboard')
   } catch (err) {
     console.error(err)

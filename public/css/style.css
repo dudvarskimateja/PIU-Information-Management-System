@@ -37,3 +37,44 @@ p {
   .search-form {
     margin: 70px 0;
   }
+
+  .date-inputs-group {
+    border-top: 4px solid #000000;
+    padding-top: 20px;
+    margin-top: 20px;
+  }
+
+  .financial-inputs-group {
+    border-top: 4px solid #000000;
+    padding-top: 20px;
+    margin-top: 20px;
+  }
+  
+  .add-invoice-page .card-content label{
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+
+  .add-invoice-page .card-title {
+    font-size: 2.5em;
+    font-weight: bold;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+  }
+
+  .contracting-authority-group {
+    border-top: 4px solid #000000;
+    padding-top: 20px;
+    margin-top: 20px;
+  }
+
+  .final-info-group {
+    border-top: 8px double #000000;
+    padding-top: 20px;
+    margin-top: 20px;
+
+  }
+
+  .card-action button {
+    margin-left: 10px; 
+}

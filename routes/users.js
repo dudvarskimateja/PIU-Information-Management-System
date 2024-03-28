@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const { ensureAuth } = require('../middleware/auth');
-const User = require('../models/User');
+const express = require('express')
+const router = express.Router()
+const { ensureAuth } = require('../middleware/auth')
+const User = require('../models/User')
 
 
 //@desc Show select role page
@@ -32,7 +32,7 @@ router.post('/select-role', ensureAuth, async (req, res) => {
         res.redirect('/admin-dashboard')
         break;
       default:
-        res.redirect('/select-role'); // Redirect to a default page if role doesn't match
+        res.redirect('/select-role')
         break;
     }
   } catch (error) {

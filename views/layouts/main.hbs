@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
         integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/style.css">
-    <title>DocMaker</title>
+    <title>PIUME</title>
 </head>
 
 <body>
@@ -21,15 +21,102 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.14.1/ckeditor.js"
         integrity="sha256-bEIQpI72w9NJuIVhTLFUF2/8uxl0u5800r8ddViuv+o=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    var elemsSelect = document.querySelectorAll('select')
-    var instances = M.FormSelect.init(elemsSelect)
+        //Initiators
+        document.addEventListener('DOMContentLoaded', function () {
+            var annexElem = document.querySelector('.annexUpload')
+            var instancesAnnexElem = M.FormSelect.init(annexElem)
 
-    var elemsSidenav = document.querySelectorAll('.sidenav')
-    M.Sidenav.init(elemsSidenav)
-  })
+            var elemsSelect = document.querySelectorAll('select')
+            var instances = M.FormSelect.init(elemsSelect)
+
+            var elemsSidenav = document.querySelectorAll('.sidenav')
+            M.Sidenav.init(elemsSidenav)
+
+            var elemsDatepicker = document.querySelectorAll('.datepicker')
+            var instancesDatepicker = M.Datepicker.init(elemsDatepicker, {
+                format: 'yyyy-mm-dd',
+                onClose: updateProjectPeriodDisplay
+            })
+
+            //Updating the date period
+            var commenceDateElem = document.querySelector('#commenceDate')
+            var completionDateElem = document.querySelector('#originalCompletionDate')
+            var displayElem = document.querySelector('#projectPeriodDisplay')
+
+            var commenceDatePicker = M.Datepicker.init(commenceDateElem, {
+                onSelect: function (selectedDate) {
+                    updateProjectPeriodDisplay()
+                }
+            })
+
+            var completionDatePicker = M.Datepicker.init(completionDateElem, {
+                onSelect: function (selectedDate) {
+                    updateProjectPeriodDisplay()
+                }
+            })
+
+            //Updating project period 
+            function updateProjectPeriodDisplay() {
+                var commenceDateValue = document.getElementById('commenceDate').value;
+                var completionDateValue = document.getElementById('originalCompletionDate').value;
+                var displayText = 'Project Period: Not Set'
+
+                if (commenceDateValue && completionDateValue) {
+                    displayElem.textContent = 'Project Period: ' + commenceDateValue + ' to ' + completionDateValue
+                } else {
+                    displayElem.textContent = 'Project Period: Not set'
+                }
+
+                document.getElementById('projectPeriodDisplay').textContent = displayText
+
+                document.getElementById('projectPeriod').value = displayText
+            }
+
+            //Updating total sum on change in the inputs
+            const sumInputs = document.querySelectorAll('.financialInput')
+            const totalSumDisplay = document.getElementById('totalSumDisplay')
+
+            sumInputs.forEach(input => {
+                input.addEventListener('input', updateTotalSum)
+            });
+
+            function updateTotalSum() {
+                let totalSum = 0
+
+                sumInputs.forEach(input => {
+                    const value = parseFloat(input.value) || 0
+                    totalSum += value
+                })
+
+                var displayText = 'Total Sum: ' + totalSum.toFixed(2) + ' EUR'
+
+                document.getElementById('totalSumDisplay').textContent = displayText;
+                document.getElementById('totalSum').value = totalSum.toFixed(2)    
+            }
+
+            function resetForm() {
+                document.getElementById('invoiceForm').reset();
+                Object.keys(localStorage).forEach(key => localStorage.removeItem(key))
+            }
+
+
+            document.getElementById('invoiceForm').addEventListener('change', () => {
+                const formData = new FormData(document.getElementById('invoiceForm'))
+                for (let [key, value] of formData.entries()) {
+                    localStorage.setItem(key, value)
+                }
+            })
+            document.getElementById('invoiceForm').elements.forEach(element => {
+                if (localStorage.getItem(element.name)) {
+                    element.value = localStorage.getItem(element.name)
+                }
+            })
+
+        })
     </script>
 </body>
 
