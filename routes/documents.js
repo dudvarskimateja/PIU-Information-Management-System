@@ -5,6 +5,7 @@ const router = express.Router()
 const { ensureAuth, ensureGuest, ensureAdmin } = require('../middleware/auth')
 const multer = require('multer')
 const upload = multer()
+const path = require('path')
 
 const Document = require('../models/Document')
 const User = require('../models/User')
@@ -12,6 +13,7 @@ const Notification = require('../models/Notification')
 const {sendEmail} = require('../config/nodemailer')
 const PDFDocument = require('pdfkit')
 const fs = require('fs')
+const { dirname } = require('path')
 
 // @desc    Show add page
 // @route   GET /documents/add
@@ -137,6 +139,9 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     doc.text(`Contract Ammount as Letter of Acceptance: ${totalSum}`, 100, y);
     y += lineSpacing
 
+    const stampPath = path.join(__dirname, '../images/Stamp.jpg')
+    doc.image(stampPath, 450, y, {width: 100})
+    y += 100
 
     doc.end()
   } catch (err) {

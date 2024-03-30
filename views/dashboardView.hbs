@@ -1,22 +1,56 @@
-<h6>Dashboard</h6>
-<h3>Welcome {{name}}</h3>
-<p>Here are your submitted documents</p>
+<h5>Welcome {{name}}</h5>
+<div class="documents-display">
+<p>Submitted Documents</p>
+</div>
 {{#if documents}}
+<style>
+    .table-head-col {
+        background-color: #afbe61; 
+        color: white; 
+        text-align: center;
+    }
+    .column-separator {
+        border-right: 2px solid #343a40; 
+    }
+    .dash-status {
+       
+    }
+    th, td{
+        text-align: center;
+    }
+
+    .documents-display {
+        text-align: center;
+        font-weight: bold;
+        font-size: xx-large;
+    }
+
+    .striped {
+        border: 2px solid #343a40;
+        padding: 10px;
+        margin-bottom: 20px; 
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #343a40;
+    }
+</style>
+
 <table class="striped">
     <thead>
         <tr>
-            <th>Code</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th></th>
+            <th class="table-head-col column separator">Code</th>
+            <th class="table-head-col column separator">Date</th>
+            <th class="table-head-col">Status</th>
+            <th class="table-head-col"></th>
         </tr>
     </thead>
     <tbody>
         {{#each documents}}
         <tr>
-            <td><a href="/documents/{{_id}}">{{this._id}}</a></td>
+            <td class="column separator"><a href="/documents/{{_id}}">{{this._id}}</a></td>
 
-            <td>{{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}</td>
+            <td class="column separator">{{formatDate createdAt 'MMMM Do YYYY, h:mm:ss a'}}</td>
             
             <td><span class="dash-status">{{this.status}}</span></td>
             
