@@ -121,7 +121,7 @@
                             <label for="extendedCompletionDate">Extended Completion Date</label>
                         </div>
                     </div>
-
+    
                     <div class="row financial-inputs-group">
                         <div class="input-field col s6">
                             <input type="number" id="advancePaymentGuaranteeValue" name="advancePaymentGuaranteeValue"
@@ -210,7 +210,9 @@
                             <input type="number" id="actualProgress" name="actualProgress" min="0" max="100"
                                 step="0.01">
                             <label for="actualProgress">Actual Progress (%)</label>
+                            <span class="percent-sign">%</span>
                         </div>
+                        
 
                         <div class="file-field input-field col s6">
                             <div class="btn">
@@ -228,8 +230,8 @@
                             <p>Subject: Interim Payment Certificate</p>
                         </div>
 
-                        <div class="text-field col s4">
-                            <p>03</p>
+                        <div id="invoiceNumber" class="text-field col s4">
+                        
                         </div>
 
                         <div id="projectPeriodDisplay" class="col s4">Project Period: Not Set</div>
@@ -263,3 +265,16 @@
         </div>
     </form>
 </div>
+
+<style>
+    .input-field .percent-sign {
+        position: absolute;
+        left: 50px;
+        top: 13px;
+        pointer-events: none;
+        color: rgba(0,0,0,0.6);
+    }
+    #actualProgress {
+        padding-right: 20px; 
+    }
+</style>

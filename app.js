@@ -7,7 +7,7 @@ const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const passport = require('passport')
 const session = require('express-session')
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo')
 const connectDB = require('./config/db')
 
 // Load config
@@ -99,8 +99,6 @@ app.use('/', require('./routes/index'))
 app.use('/auth', require('./routes/auth'))
 app.use('/documents', require('./routes/documents'))
 app.use('/users', require('./routes/users'))
-
-
 
 const PORT = process.env.PORT || 3000
 

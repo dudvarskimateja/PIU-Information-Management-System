@@ -8,20 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css"
         integrity="sha256-46r060N2LrChLLb5zowXQ72/iKKNiw/lAmygmHExk/o=" crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>PIUME</title>
 </head>
 
 <body>
     {{> _header}}
-    {{> _add_btn}}
     <div class="container">
         {{{body}}}
     </div>
+    {{> _footer}}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.14.1/ckeditor.js"
         integrity="sha256-bEIQpI72w9NJuIVhTLFUF2/8uxl0u5800r8ddViuv+o=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js/dist/cleave.min.js"></script>
 
 
     <script>
@@ -33,8 +35,37 @@
             var elemsSelect = document.querySelectorAll('select')
             var instances = M.FormSelect.init(elemsSelect)
 
+            var dropdowns = document.querySelectorAll('.dropdown-trigger')
+            var dropdownInstances = M.Dropdown.init(dropdowns)
+
             var elemsSidenav = document.querySelectorAll('.sidenav')
             M.Sidenav.init(elemsSidenav)
+
+            let currentSectionIndex = 0;
+            const sections = document.querySelectorAll('.swap-section');
+            const swapInterval = 120000; // milliseconds
+
+            setInterval(() => {
+                currentSectionIndex = (currentSectionIndex + 1) % sections.length;
+                window.scrollTo({
+                    top: sections[currentSectionIndex].offsetTop,
+                    behavior: 'smooth'
+                });
+            }, swapInterval);
+
+            
+            var footerElem = sidenavElem.querySelector('.sidenav-footer');
+            if (!footerElem) {
+                footerElem = document.createElement('li');
+                footerElem.classList.add('sidenav-footer');
+                footerElem.innerHTML = '<a>PIUME 2024</a>';
+                sidenavElem.appendChild(footerElem);
+            }
+
+            const actualProgressInput = document.getElementById('actualProgress');
+            if (actualProgressInput) {
+                formatPercentage(actualProgressInput);
+            }
 
             var elemsDatepicker = document.querySelectorAll('.datepicker')
             var instancesDatepicker = M.Datepicker.init(elemsDatepicker, {
@@ -95,7 +126,7 @@
                 var displayText = 'Total Sum: ' + totalSum.toFixed(2) + ' EUR'
 
                 document.getElementById('totalSumDisplay').textContent = displayText;
-                document.getElementById('totalSum').value = totalSum.toFixed(2)    
+                document.getElementById('totalSum').value = totalSum.toFixed(2)
             }
 
             function resetForm() {
@@ -116,6 +147,20 @@
                 }
             })
 
+            var invoiceForm = document.getElementById('invoiceForm');
+            invoiceForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const invoiceNumber = Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('invoiceNumber').textContent = `Invoice Number: ${invoiceNumber}`;
+            })
+
+            sumInputs.forEach(function (input) {
+                new Cleave(input, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: 'thousand',
+                    delimiter: ' '
+                })
+            })
         })
     </script>
 </body>

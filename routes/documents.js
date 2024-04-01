@@ -45,7 +45,7 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
       res.redirect('/dashboard')
     })
 
-    let y = 100
+    let y = 60
     const lineSpacing = 15
     const horizontalLineStart = 50
     const horizontalLineEnd = 550
@@ -53,7 +53,16 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     const projectPeriod = req.body.projectPeriod
     const totalSum = req.body.totalSum
 
+    doc.fontSize(16).text('Invoice', {align: 'center'})
+    doc.moveDown()
+
+    const addSection = (title, y) => {
+      doc.fontSize(14).text(title, 50, y, {underline: true});
+      return y + 20;
+    };
+
     //Contractor information
+    y = addSection('Contractor Information', y)
     doc.fontSize(12).text(`Contractor: ${req.body.contractor}`, 100, y);
     y += lineSpacing
     doc.text(`MX and Address: ${req.body.MXandAddress}`, 100, y);
@@ -67,6 +76,7 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     y += lineSpacing
 
     //Contracting authority info
+    y = addSection('Contracting Authority', y)
     doc.text(`Contracting Authority: ${req.body.contractingAuthority}`, 100, y);
     y += lineSpacing
     doc.text(`Authority Address 1: ${req.body.authorityAddress1}`, 100, y);
@@ -91,6 +101,7 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     y += lineSpacing
 
     //Financial and date info
+    y = addSection('Project Periods', y)
     doc.text(`Period Of Valuation Start: ${req.body.periodOfValuationStart}`, 100, y);
     y += lineSpacing
     doc.text(`Period Of Valuation End: ${req.body.periodOfValuationEnd}`, 100, y);
@@ -103,6 +114,12 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     y += lineSpacing
     doc.text(`Extended Completion Date: ${req.body.extendedCompletionDate}`, 100, y);
     y += lineSpacing
+
+    y += lineSpacing
+    doc.moveTo(horizontalLineStart, y).lineTo(horizontalLineEnd, y).stroke()
+    y += lineSpacing
+
+    y = addSection('Financial Details', y)
     doc.text(`Advance Payment Guarantee Value (EUR): ${req.body.advancePaymentGuaranteeValue}`, 100, y);
     y += lineSpacing
     doc.text(`Advance Payment Guarantee Expiry Date: ${req.body.advancePaymentGuaranteeExpiry}`, 100, y);
@@ -133,15 +150,20 @@ router.post('/', ensureAuth, upload.single('annexUpload'), async (req, res) => {
     y += lineSpacing
 
     //Summary
-    y += lineSpacing
+    y = addSection('Summary', y)
     doc.text(`For the Period: ${projectPeriod}`, 100, y);
     y += lineSpacing
     doc.text(`Contract Ammount as Letter of Acceptance: ${totalSum}`, 100, y);
     y += lineSpacing
 
-    const stampPath = path.join(__dirname, '../images/Stamp.jpg')
+    const stampPath = path.join(__dirname, '../public/images/Stamp.jpg')
     doc.image(stampPath, 450, y, {width: 100})
     y += 100
+
+    doc.moveTo(50, 750).lineTo(550, 750).stroke();
+
+    // Footer
+    doc.fontSize(10).text('This is a computer-generated document and does not require a signature.', 50, 760);
 
     doc.end()
   } catch (err) {

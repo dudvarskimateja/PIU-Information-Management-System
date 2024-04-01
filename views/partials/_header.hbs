@@ -1,10 +1,30 @@
 <nav class="blue darken-4">
-    <div class="nav-wrapper container">
 
+    <div class="nav-wrapper container">
         <a href="#!" class="brand-logo center">PIUME</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large"><i class="fas fa-bars"></i></a>
-        <ul class="sidenav" id="mobile-demo">
-            <li><a href="/auth/logout">Logout</a></li>
+
+        <ul class="right hide-on-med-and-down">
+            <li><a class="dropdown-trigger" href="#!" data-target="dropdown">Documents<i class="material-icons right">arrow_drop_down</i></a></li>
         </ul>
+
+        <ul id="dropdown" class="dropdown-content">
+            <li><a href="/documents/add">Invoice</a></li>
+            <li class="divider"></li>
+            <li><a href="">Requests</a></li>
+            <li class="divider"></li>
+            <li><a href="">Clarification</a></li>
+            <li class="divider"></li>
+            <li><a href="">Official Note</a></li>
+        </ul>
+
+        <ul class="sidenav piume-sidenav" id="mobile-demo" style="z-index: 1000;">
+            <li><a href="/auth/logout">Logout</a></li>
+            <li><a href="/landing">Home Page</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li class="sidenav-footer">PIUME 2024</li>
+        </ul>
+
     </div>
 </nav>
